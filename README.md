@@ -56,6 +56,6 @@ This tool helps developers identify and avoid such collisions during the develop
 ```
 
 
-**Built with ❤️ by [Zaki](https://github.com/yourusername)**
+**Built with ❤️ by [Zaki](https://github.com/6ixtyy)**
 
 *For smart contract security and development best practices.*
