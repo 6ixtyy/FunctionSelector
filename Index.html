@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Function Selector Checker</title>
+    <script src="https://cdn.jsdelivr.net/npm/ethers@6.10.0/dist/ethers.umd.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-900 text-white font-mono p-4">
+    <div class="max-w-xl mx-auto">
+      <h1 class="text-2xl font-bold mb-4">🔍 Function Selector Checker</h1>
+
+      <!-- Single function selector calculator -->
+      <div class="mb-8">
+        <label class="block mb-2">Function Signature</label>
+        <input
+          id="sigInput"
+          type="text"
+          placeholder="transfer(address,uint256)"
+          class="w-full p-2 rounded bg-gray-800 border border-gray-600"
+        />
+        <button
+          onclick="calculateSelector()"
+          class="mt-2 px-4 py-2 bg-blue-600 rounded hover:bg-blue-700"
+        >
+          Calculate Selector
+        </button>
+        <div class="mt-4">
+          <p>Selector:</p>
+          <div id="selectorResult" class="bg-gray-800 p-2 rounded break-all"></div>
+          <button
+            onclick="copySelector()"
+            class="mt-2 px-3 py-1 bg-green-600 rounded hover:bg-green-700"
+          >
+            Copy Selector
+          </button>
+        </div>
+      </div>
+
+      <!-- Collision checker -->
+      <div class="mb-8">
+        <h2 class="text-xl font-bold mb-2"> Collision Checker</h2>
+        <label class="block mb-2">Function Signature A</label>
+        <input
+          id="sigA"
+          type="text"
+          placeholder="approve(address,uint256)"
+          class="w-full p-2 rounded bg-gray-800 border border-gray-600 mb-2"
+        />
+
+        <label class="block mb-2">Function Signature B</label>
+        <input
+          id="sigB"
+          type="text"
+          placeholder="transfer(address,uint256)"
+          class="w-full p-2 rounded bg-gray-800 border border-gray-600"
+        />
+
+        <button
+          onclick="checkCollision()"
+          class="mt-2 px-4 py-2 bg-red-600 rounded hover:bg-red-700"
+        >
+          Check Collision
+        </button>
+        <div class="mt-4" id="collisionResult"></div>
+      </div>
+
+      <!-- Educational note -->
+      <div class="text-sm text-gray-400">
+        Function selector collisions can lead to critical vulnerabilities in proxy
+        patterns or fallback calls. Always verify selector uniqueness. Built by
+        <a href="https://github.com/yourusername" class="underline">Zaki</a>.
+      </div>
+    </div>
+
+    <script>
+      function calculateSelector() {
+        const sig = document.getElementById("sigInput").value.trim();
+        if (!sig) return;
+
+        const hash = ethers.keccak256(ethers.toUtf8Bytes(sig));
+        const selector = hash.slice(0, 10);
+        document.getElementById("selectorResult").innerText = selector;
+      }
+
+      function copySelector() {
+        const selector = document.getElementById("selectorResult").innerText;
+        navigator.clipboard.writeText(selector);
+        alert("Selector copied!");
+      }
+
+      function checkCollision() {
+        const sigA = document.getElementById("sigA").value.trim();
+        const sigB = document.getElementById("sigB").value.trim();
+        if (!sigA || !sigB) return;
+
+        const selA = ethers.keccak256(ethers.toUtf8Bytes(sigA)).slice(0, 10);
+        const selB = ethers.keccak256(ethers.toUtf8Bytes(sigB)).slice(0, 10);
+
+        const res = selA === selB
+          ? ` Collision detected! Both have selector ${selA}`
+          : ` No collision. Selector A: ${selA}, Selector B: ${selB}`;
+
+        document.getElementById("collisionResult").innerText = res;
+      }
+    </script>
+  </body>
+</html>
