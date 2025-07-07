@@ -1,6 +1,9 @@
 # FunctionSelector
 🌐 **[Live Demo](https://6ixtyy.github.io/FunctionSelector/)**
 
+In 2021, Poly Network’s bridge contracts were hacked, losing $611M due to a collision vulnerability—inspiring me to build a collision checker.
+
+
 A web-based tool for calculating Ethereum function selectors and detecting selector collisions. This tool is essential for smart contract developers and security researchers working with Ethereum smart contracts.
 
 ## What is FunctionSelector?
